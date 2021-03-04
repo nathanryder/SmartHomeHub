@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/header :: files">
+    <title>Dashboard</title>
+</head>
+<body>
+<header th:insert="fragments/header.html :: header"></header>
+
+<style>
+    .form-group {
+        padding: 5px;
+    }
+</style>
+
+<div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+    <div class="container">
+        <div style="visibility: hidden;" class="alert alert-danger" id="error"></div>
+
+        <form>
+            <div class="form-group">
+                <label for="displayName">Display Name</label>
+                <input type="text" class="form-control" id="displayName">
+            </div>
+            <div class="form-group">
+                <label for="deviceID">Device ID</label>
+                <input type="text" class="form-control" id="deviceID">
+            </div>
+            <div class="form-group">
+                <label for="statusTopic">Status Topic</label>
+                <input type="text" class="form-control" id="statusTopic">
+            </div>
+
+            <label>Method</label>
+            <div class="form-check">
+                <input class="form-check-input" name="method" type="radio" id="method-write" value="write" checked>
+                <label class="form-check-label" for="method-write">
+                    Write
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" name="method" type="radio" id="method-read" value="read">
+                <label class="form-check-label" for="method-read">
+                    Read
+                </label>
+            </div>
+
+
+            <div class="form-group">
+                <label for="updateTopic">Update Topic</label>
+                <input type="text" class="form-control" id="updateTopic">
+            </div>
+            <div class="form-group">
+                <label for="activePayload">Active Payload</label>
+                <input type="text" class="form-control" id="activePayload">
+            </div>
+            <div class="form-group">
+                <label for="inactivePayload">Inactive Payload</label>
+                <input type="text" class="form-control" id="inactivePayload">
+            </div>
+
+            <button id="addDevice" type="submit" class="btn btn-primary">Add Device</button>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    $("#method-read").change(function(e) {
+        $("#updateTopic").attr("readonly", true);
+        $("#activePayload").attr("readonly", true);
+        $("#inactivePayload").attr("readonly", true);
+    });
+    $("#method-write").change(function(e) {
+        $("#updateTopic").attr("readonly", false);
+        $("#activePayload").attr("readonly", false);
+        $("#inactivePayload").attr("readonly", false);
+    });
+
+    $("#addDevice").click(function (e) {
+        e.preventDefault();
+
+        var error = $("#error");
+        var displayName = $("#displayName").val();
+        var deviceID = $("#deviceID").val();
+        var statusTopic = $("#statusTopic").val();
+        var writeMethod = $("#method-write").is(":checked");
+        var updateTopic = $("#updateTopic").val();
+        var activePayload = $("#activePayload").val();
+        var inactivePayload = $("#inactivePayload").val();
+
+        var data = {};
+        if (!displayName || !deviceID || !statusTopic) {
+            error.html("You must fill out all required fields!");
+            error.css({"visibility": "visible"});
+            return;
+        }
+        if (writeMethod) {
+            if (!updateTopic || !activePayload || !inactivePayload) {
+                error.html("You must fill out all required fields!");
+                error.css({"visibility": "visible"});
+                return;
+            }
+
+            data.updateTopic = updateTopic;
+            data.activePayload = activePayload;
+            data.inactivePayload = inactivePayload;
+        }
+
+        data.displayName = displayName;
+        data.deviceID = deviceID;
+        data.statusTopic = statusTopic;
+        data.method = writeMethod === true ? "write" : "read";
+
+        $.ajax({
+            url: "/api/devices/",
+            type: "POST",
+            data: data,
+            success: function() {
+                window.location.href = "/devices";
+            },
+            error: function(err) {
+                if (err.responseJSON.error === undefined) {
+                    error.html("Server error occured");
+                    return;
+                }
+
+                error.html(err.responseJSON.error);
+                $("#error").css({"visibility": "visible"});
+            }
+        });
+    });
+</script>
+
+<footer th:insert="fragments/header.html :: footer"></footer>
+</body>
+</html>

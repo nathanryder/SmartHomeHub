@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/header :: files">
+    <title>Floorplan</title>
+</head>
+<body>
+<header th:insert="fragments/header.html :: header"></header>
+
+
+<div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <img style="width: 100%; padding-bottom: 15px;" src="https://via.placeholder.com/1200x700" alt="Floor plan">
+
+    <button style="float: left;" class="btn btn-success">^ Upload Map</button>
+    <button style="float: right;" class="btn btn-primary">+ Add Device</button>
+</div>
+
+<footer th:insert="fragments/header.html :: footer"></footer>
+</body>
+</html>
