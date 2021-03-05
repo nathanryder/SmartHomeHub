@@ -10,11 +10,6 @@ pipeline {
     stages {
         stage("Setup") {
             steps {
-                script {
-                    def user = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
-                    print("CAUSE: " + user.isEmpty())
-                }
-
                 deleteDir()
 
                 git branch: "develop", url: "git@github.com:nathanryder/SmartHomeHub.git", credentialsId: "ba55b59e-cea4-455e-9d8f-75907fa49d11"
@@ -37,24 +32,27 @@ pipeline {
                 """
 
                 script {
-                    print("CAUSE: " + user.isEmpty())
+                    print("CAUSE: " + user)
                 }
             }
         }
 
         stage("Merge") {
-            when {
-                expression {
-                    user.isEmpty()
-                }
-            }
             steps {
-                sh """
-                    ls -a
-                    git fetch origin master
-                    git merge origin/master
-                    git push origin develop:master
-                """
+                script {
+                    def user = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
+                    print("CAUSE: " + user)
+                    print("CAUSE: " + user.isEmpty())
+
+                    if (user.isEmpty()){
+                        sh """
+                            ls -a
+                            git fetch origin master
+                            git merge origin/master
+                            git push origin develop:master
+                        """
+                    }
+                }
             }
         }
 
