@@ -14,6 +14,7 @@ pipeline {
                     def user = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
                     print("CAUSE: " + (user.isEmpty()))
                     print("CAUSE2: " + user.userId)
+                    //test
                 }
 
                 deleteDir()
