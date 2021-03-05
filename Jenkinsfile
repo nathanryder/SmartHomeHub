@@ -27,13 +27,7 @@ pipeline {
                 sh """
                     docker build -t nathanryder/finalyearproject .
                     docker push nathanryder/finalyearproject:latest
-
-                    printenv
                 """
-
-                script {
-                    print("CAUSE: " + user)
-                }
             }
         }
 
@@ -41,9 +35,6 @@ pipeline {
             steps {
                 script {
                     def user = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
-                    print("CAUSE: " + user)
-                    print("CAUSE: " + user.isEmpty())
-
                     if (user.isEmpty()){
                         sh """
                             ls -a
