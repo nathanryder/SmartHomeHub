@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class FinalyearprojectApplication {
 
 	public static void main(String[] args) {
-//		SpringApplication.run(FinalyearprojectApplication.class, args);
+		SpringApplication.run(FinalyearprojectApplication.class, args);
 
 		MqttClient client = null;
 		try {
