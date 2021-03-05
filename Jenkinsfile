@@ -12,9 +12,6 @@ pipeline {
             steps {
                 script {
                     def user = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
-                    print("CAUSE: " + (user.isEmpty()))
-                    print("CAUSE2: " + user.userId)
-                    //test
                 }
 
                 deleteDir()
@@ -43,7 +40,7 @@ pipeline {
         stage("Merge") {
             when {
                 expression {
-                    env.CHANGE_ID != null
+                    user.isEmpty()
                 }
             }
             steps {
