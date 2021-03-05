@@ -12,6 +12,7 @@ pipeline {
             steps {
                 script {
                     def user = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
+                    print("CAUSE: " + user.isEmpty())
                 }
 
                 deleteDir()
@@ -34,6 +35,10 @@ pipeline {
 
                     printenv
                 """
+
+                script {
+                    print("CAUSE: " + user.isEmpty())
+                }
             }
         }
 
