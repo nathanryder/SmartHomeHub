@@ -26,6 +26,15 @@ pipeline {
             steps {
                 sh """
                     docker build -t nathanryder/finalyearproject .
+
+                    docker run --rm -it -p 8081:8080 nathanryder/finalyearproject
+                    echo "Running healthcheck.."
+                    exitCode=$(curl --retry-connrefused --connect-timeout 5 --retry 3 --retry-delay 2 "http://127.0.0.1:8081/"; echo $?)
+                    if [ \$exitCode -ne 0 ]; then
+                        echo "Healthcheck failed!"
+                        exit 1;
+                    fi
+
                     docker push nathanryder/finalyearproject:latest
                 """
             }
@@ -57,6 +66,10 @@ pipeline {
     post {
         always {
             script {
+                sh """
+                    docker ps | grep "nathanryder/finalyearproject" | awk -F" " '{print $1}' | xargs docker kill
+                """
+
                 CHANGES = "*No changes*"
                 if (env.CHANGE_TITLE) {
                     CHANGES = "${env.CHANGE_TITLE}"
