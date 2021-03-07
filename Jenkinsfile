@@ -25,8 +25,7 @@ pipeline {
         stage("Create Images") {
             steps {
                 sh """
-                    docker build -t nathanryder/finalyearproject .
-                    docker push nathanryder/finalyearproject:latest
+                    docker buildx build --platform linux/amd64,linux/arm/v7 -t nathanryder/finalyearproject:latest --push .
                  """
             }
         }
@@ -48,7 +47,18 @@ pipeline {
 
         stage("Deploy") {
             steps {
-                echo "DEPLOY"
+                echo "Deploying to Raspberry Pi.."
+                sh """
+                    ssh pi@89.124.4.203 -p 1013 << EOL
+                        cd /tmp
+                        git clone git@github.com:nathanryder/SmartHomeHub.git
+                        cd SmartHomeHub/scripts/
+                        chmod +x deploy.sh
+                        ./deploy.sh
+                    EOL
+
+                """
+                echo "Done!"
             }
         }
     }

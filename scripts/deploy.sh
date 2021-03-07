@@ -2,6 +2,7 @@ docker kill $(docker ps | grep "nathanryder/finalyearproject" | awk -F" " '{prin
 docker pull nathanryder/finalyearproject
 
 id=$(docker run -d nathanryder/finalyearproject)
+sleep 60
 running=$(docker ps | grep "nathanryder/finalyearproject")
 if [ ${#running} -eq 0 ]; then
   curl -H "Content-Type: application/json" -d '{"embeds":
