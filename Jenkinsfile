@@ -28,8 +28,6 @@ pipeline {
                     docker build -t nathanryder/finalyearproject .
                     docker push nathanryder/finalyearproject:latest
                  """
-                }
-
             }
         }
 
