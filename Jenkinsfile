@@ -56,10 +56,6 @@ pipeline {
     post {
         always {
             script {
-                sh """
-                    docker ps | grep "nathanryder/finalyearproject" | awk -F" " '{print \$1}' | xargs docker kill
-                """
-
                 CHANGES = "*No changes*"
                 if (env.CHANGE_TITLE) {
                     CHANGES = "${env.CHANGE_TITLE}"
