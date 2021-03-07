@@ -59,7 +59,7 @@ pipeline {
         always {
             script {
                 sh """
-                    docker ps | grep "nathanryder/finalyearproject" | awk -F" " '{print $1}' | xargs docker kill
+                    docker ps | grep "nathanryder/finalyearproject" | awk -F" " '{print \$1}' | xargs docker kill
                 """
 
                 CHANGES = "*No changes*"
