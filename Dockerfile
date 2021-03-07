@@ -4,7 +4,7 @@ COPY pom.xml /usr/src/app
 RUN sed -i "s/127.0.0.1/172.17.0.1/g" /usr/src/app/src/main/resources/application.properties
 RUN mvn -f /usr/src/app/pom.xml package
 
-FROM openjdk:11-jre-slim
+FROM openjdk:11-jre-slim-stretch
 COPY --from=build /usr/src/app/target/finalyearproject-*-SNAPSHOT.jar /usr/app/finalyearproject.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/usr/app/finalyearproject.jar"]
