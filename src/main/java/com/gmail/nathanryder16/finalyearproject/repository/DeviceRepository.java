@@ -9,4 +9,6 @@ public interface DeviceRepository extends CrudRepository<Device, String> {
 
     Device findByDeviceID(String deviceID);
 
+    List<Device> findAllByStatusTopic(String statusTopic);
+
 }

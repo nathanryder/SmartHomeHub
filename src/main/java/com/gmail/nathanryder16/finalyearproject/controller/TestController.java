@@ -1,19 +1,25 @@
 package com.gmail.nathanryder16.finalyearproject.controller;
 
+import com.gmail.nathanryder16.finalyearproject.cards.Card;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class TestController {
 
     @GetMapping("/test")
-    public String test(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
-        model.addAttribute("name", name);
+    public String test(Model model) {
+        List<Card> cards = new ArrayList<>();
+        Card card = new Card("test");
+        cards.add(card);
+
+        model.addAttribute("cards", cards);
         return "test";
     }
 

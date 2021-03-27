@@ -19,6 +19,7 @@ public class Device {
     private @Getter @Setter String updateTopic;
     private @Getter @Setter String activePayload;
     private @Getter @Setter String inactivePayload;
+    private @Getter @Setter String lastStatus = "";
 
     public Device(String deviceID, String displayName, String statusTopic, String method) {
         this.deviceID = deviceID;
