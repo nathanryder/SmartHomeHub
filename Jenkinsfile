@@ -51,6 +51,7 @@ pipeline {
                 sh """
                     ssh pi@89.124.4.203 -p 1013 << EOL
                         cd /tmp
+                        rm -rf SmartHomeHub/
                         git clone git@github.com:nathanryder/SmartHomeHub.git
                         cd SmartHomeHub/scripts/
                         chmod +x deploy.sh
