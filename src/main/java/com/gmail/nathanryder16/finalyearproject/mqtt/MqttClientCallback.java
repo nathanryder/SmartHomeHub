@@ -10,6 +10,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class MqttClientCallback implements MqttCallback {
@@ -32,14 +34,40 @@ public class MqttClientCallback implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage mqttMessage) {
-        System.out.println("Arrived: " + topic + " - " + new String(mqttMessage.getPayload()));
+//        System.out.println("Arrived: " + topic + " - " + new String(mqttMessage.getPayload()));
 
         List<Device> update = devices.findAllByStatusTopic(topic);
         String msg = new String(mqttMessage.getPayload());
 
         for (Device device : update) {
             System.out.println("Update status of: " + device.getDisplayName());
-            simp.convertAndSend("/topic/updateDevices", "{'deviceID':'" + device.getDeviceID() + "', 'message':'" + msg + "'}");
+
+            String status = null;
+            if (device.getStatusPattern() != null) {
+                String t = "{\"status\":\"%s\"}";
+
+                String template = device.getStatusPattern().replace("%s", "(.*)").replace("\"", "\\\"");
+                template = template.replace("{", "\\{").replace("}", "\\}");
+                Pattern pattern = Pattern.compile(template);
+                Matcher matcher = pattern.matcher(msg);
+
+                if (matcher.matches()) {
+                    status = matcher.group(1);
+                }
+            }
+
+
+
+            if (status == null) {
+                if (!msg.startsWith("{")) {
+                    msg = "\"" + msg + "\"";
+                }
+            } else {
+                msg = "\"" + status + "\"";
+            }
+
+            System.out.println("Update: " + msg);
+            simp.convertAndSend("/topic/update/" + device.getDeviceID(), "{\"deviceID\":\"" + device.getDeviceID() + "\", \"message\":" + msg + "}");
 
             device.setLastStatus(msg);
             devices.save(device);

@@ -8,7 +8,94 @@
 
 <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
     <p>Dashboard page</p>
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            Add Card
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" th:each="card : ${availableCards}" class="dropdown-item" href="#" th:text="${card.toString()}"></button>
+        </div>
+    </div>
+
+    <div th:each="card : ${dashboard.getCards()}">
+        <div class="devicecard" th:insert="fragments/testcard.html :: test(${card}, ${card.getDevice()})"></div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Card</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <span id="error"></span>
+<!--                    <span style="visibility: hidden;" class="alert alert-danger" id="error"></span>-->
+
+                    <input type="hidden" class="form-control" id="type">
+                    <div class="input-group mb-3">
+                        <input id="deviceID" type="text" class="form-control" placeholder="Device ID">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="addCard" type="button" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var exampleModal = document.getElementById('exampleModal');
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var type = button.textContent;
+
+            var typeEl = exampleModal.querySelector('#type');
+            typeEl.value = type
+        });
+
+        $("#addCard").click(function() {
+
+            var type = $("#type").val();
+            var deviceID = $("#deviceID").val();
+
+            var data = {
+                "cardType": type,
+                "deviceID": deviceID
+            };
+            console.log(data.responseJSON);
+
+            $.ajax({
+                url: "/api/dashboards/",
+                type: "POST",
+                data: data,
+                success: function() {
+                    location.reload()
+                },
+                error: function(err) {
+                    if (err.responseJSON.error === undefined) {
+                        error.html("Server error occured");
+                        return;
+                    }
+
+                    displayError("#error", "Failed to add card: " + err.responseJSON.error)
+                }
+            });
+
+        })
+
+        function displayError(selector, errorString) {
+            var el = $(selector);
+            el.html('<div  class="alert alert-danger">' + errorString + '</div>')
+        }
+
+    </script>
 </div>
+
 
 <footer th:insert="fragments/header.html :: footer"></footer>
 </body>

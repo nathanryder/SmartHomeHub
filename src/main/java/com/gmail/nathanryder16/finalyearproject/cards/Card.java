@@ -1,5 +1,6 @@
 package com.gmail.nathanryder16.finalyearproject.cards;
 
+import com.gmail.nathanryder16.finalyearproject.model.Device;
 import lombok.Getter;
 
 import java.io.InputStream;
@@ -7,20 +8,22 @@ import java.util.Scanner;
 
 public class Card {
 
-    private @Getter String file;-
+    private @Getter CardType type;
+    private @Getter Device device;
 
-    public Card(String file) {
-        this.file = file;
+    public Card(CardType type, Device device) {
+        this.type = type;
+        this.device = device;
     }
 
-    public String getFileContents() {
-
-        InputStream is = getClass().getClassLoader().getResourceAsStream("static/cards/" + file + ".html");
-        Scanner scanner = new Scanner(is).useDelimiter("\\A");
-        String data = scanner.hasNext() ? scanner.next() : "";
-
-        return data;
-    }
+//    public String getFileContents() {
+//
+//        InputStream is = getClass().getClassLoader().getResourceAsStream("static/cards/" + type.getFilename());
+//        Scanner scanner = new Scanner(is).useDelimiter("\\A");
+//        String data = scanner.hasNext() ? scanner.next() : "";
+//
+//        return data;
+//    }
 
 
 }

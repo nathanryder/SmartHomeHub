@@ -47,7 +47,8 @@ public class DeviceController {
                                     @RequestParam("method") String method,
                                     @RequestParam(value = "updateTopic", required = false) String updateTopic,
                                     @RequestParam(value = "activePayload", required = false) String activePayload,
-                                    @RequestParam(value = "inactivePayload", required = false) String inactivePayload) {
+                                    @RequestParam(value = "inactivePayload", required = false) String inactivePayload,
+                                    @RequestParam(value = "pattern", required = false) String pattern) {
 
         if (deviceID.contains(" ")) {
             JsonObject msg = new JsonParser().parse("{\"error\": \"Device ID cannot contain spaces!\"}").getAsJsonObject();
@@ -65,6 +66,10 @@ public class DeviceController {
             device.setUpdateTopic(updateTopic);
             device.setActivePayload(activePayload);
             device.setInactivePayload(inactivePayload);
+        }
+
+        if (pattern != null) {
+            device.setStatusPattern(pattern);
         }
 
         devices.save(device);

@@ -6,10 +6,14 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="/css/main.css" rel="stylesheet">
+    <link th:each="path : ${cssPaths}" th:href="${path}" rel="stylesheet">
 </head>
 
 <footer th:fragment="footer">
     <script src="/js/main.js"></script>
+    <script src="/webjars/sockjs-client/1.0.2/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/2.3.3/stomp.min.js"></script>
+    <script th:each="path : ${jsPaths}" th:src="${path}"></script>
 
     <script th:inline="javascript">
         $(document).ready(function (){

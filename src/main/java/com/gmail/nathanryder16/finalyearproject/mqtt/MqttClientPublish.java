@@ -47,10 +47,11 @@ public class MqttClientPublish {
         msg.setPayload(message.getBytes());
 
         MqttTopic mqttTopic = MqttClientPublish.getMqttClient().getTopic(topic);
-        MqttDeliveryToken tkn;
+
+        MqttDeliveryToken delivery;
         try {
-            tkn = mqttTopic.publish(msg);
-            tkn.waitForCompletion();
+            delivery = mqttTopic.publish(msg);
+            delivery.waitForCompletion();
         } catch (MqttException e) {
             e.printStackTrace();
         }

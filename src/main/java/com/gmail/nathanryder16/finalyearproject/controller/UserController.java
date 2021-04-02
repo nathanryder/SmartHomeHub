@@ -57,7 +57,7 @@ public class UserController {
         BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
 
         if (result.verified) {
-            session.setAttribute("loggedIn", user.getEmail());
+            session.setAttribute("loggedIn", user.getId());
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

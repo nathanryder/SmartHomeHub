@@ -19,7 +19,8 @@ public class Device {
     private @Getter @Setter String updateTopic;
     private @Getter @Setter String activePayload;
     private @Getter @Setter String inactivePayload;
-    private @Getter @Setter String lastStatus = "";
+    private @Setter String lastStatus = "";
+    private @Getter @Setter String statusPattern;
 
     public Device(String deviceID, String displayName, String statusTopic, String method) {
         this.deviceID = deviceID;
@@ -30,6 +31,10 @@ public class Device {
 
     public Device() {
 
+    }
+
+    public String getLastStatus() {
+        return lastStatus.replace("\"", "");
     }
 
 }

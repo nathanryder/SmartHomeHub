@@ -20,7 +20,7 @@ public class SocketController {
     private DeviceRepository deviceRepo;
 
     @MessageMapping("/socket")
-    @SendTo("/topic/updateDevices")
+//    @SendTo("/topic/updateDevices")
     public void update(UpdateMessage message) {
         System.out.println("REC: " + message.getDeviceID() + ":" + message.getMessage());
 
