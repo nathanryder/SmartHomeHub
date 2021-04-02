@@ -12,7 +12,7 @@ pipeline {
             steps {
                 deleteDir()
 
-                git branch: "develop", url: "git@github.com:nathanryder/SmartHomeHub.git", credentialsId: "ba55b59e-cea4-455e-9d8f-75907fa49d11"
+                git branch: "develop", url: "git@github.com:nathanryder/SmartHomeHub.git", credentialsId: "7d9677f7-a137-42c2-96c2-aa765992a71f"
             }
         }
 
