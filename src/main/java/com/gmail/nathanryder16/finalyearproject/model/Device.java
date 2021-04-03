@@ -21,6 +21,7 @@ public class Device {
     private @Getter @Setter String inactivePayload;
     private @Setter String lastStatus = "";
     private @Getter @Setter String statusPattern;
+    private @Getter @Setter String updatePattern;
 
     public Device(String deviceID, String displayName, String statusTopic, String method) {
         this.deviceID = deviceID;
@@ -34,7 +35,7 @@ public class Device {
     }
 
     public String getLastStatus() {
-        return lastStatus.replace("\"", "");
+        return lastStatus.replace("\"", "").replace(getActivePayload(), "ON").replace(getInactivePayload(), "OFF");
     }
 
 }

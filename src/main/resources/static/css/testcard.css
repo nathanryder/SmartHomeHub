@@ -5,3 +5,27 @@
 .button_off {
     color: red;
 }
+
+.button_off .status {
+    background-color: red;
+}
+
+.button_on .status {
+    background-color: green;
+}
+
+.status {
+    background-color: black;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.button {
+    padding: 20px;
+    margin-top: 10px;
+    background-color: dodgerblue;
+    border-radius: 8px;
+}

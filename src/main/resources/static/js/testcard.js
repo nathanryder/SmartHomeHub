@@ -15,9 +15,11 @@ $(document).ready(function() {
                 var el = $("#" + id);
 
                 if (status === "ON") {
-                    el.attr("class", "button_on");
+                    el.removeClass("button_off");
+                    el.addClass("button_on");
                 } else if (status === "OFF") {
-                    el.attr("class", "button_off");
+                    el.removeClass("button_on");
+                    el.addClass("button_off");
                 } else {
                     console.log("ERROR: Invalid status");
                 }
@@ -30,13 +32,17 @@ $(document).ready(function() {
     $("[id^=BUTTON]").click(function () {
         var deviceID = $(this).attr("id").split("_")[1];
 
-        var selected = $(this).attr("class")
+        var selected = $(this).attr("class");
 
         var status = "on";
-        if (selected === "button_on") {
+        console.log(selected)
+        if (selected.includes("button_on")) {
             status = "off"
         }
-        $(this).attr("class", "button_" + status);
+
+        $(this).removeClass("button_off");
+        $(this).removeClass("button_on");
+        $(this).addClass("button_" + status);
 
         stompClient.send("/ws/socket", {}, JSON.stringify({"deviceID": deviceID, "message": status.toUpperCase()}));
     })

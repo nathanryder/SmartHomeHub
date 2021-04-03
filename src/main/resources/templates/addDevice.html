@@ -31,6 +31,15 @@
                 <input type="text" class="form-control" id="statusTopic">
             </div>
 
+            <div class="form-group">
+                <label for="statusTopic">Status Pattern</label>
+                <input type="text" class="form-control" id="statusPattern">
+            </div>
+            <div class="form-group">
+                <label for="statusTopic">Update Pattern</label>
+                <input type="text" class="form-control" id="updatePattern">
+            </div>
+
             <label>Method</label>
             <div class="form-check">
                 <input class="form-check-input" name="method" type="radio" id="method-write" value="write" checked>
@@ -44,7 +53,6 @@
                     Read
                 </label>
             </div>
-
 
             <div class="form-group">
                 <label for="updateTopic">Update Topic</label>
@@ -88,6 +96,8 @@
         var updateTopic = $("#updateTopic").val();
         var activePayload = $("#activePayload").val();
         var inactivePayload = $("#inactivePayload").val();
+        var statusPattern = $("#statusPattern").val();
+        var updatePattern = $("#updatePattern").val();
 
         var data = {};
         if (!displayName || !deviceID || !statusTopic) {
@@ -105,12 +115,22 @@
             data.updateTopic = updateTopic;
             data.activePayload = activePayload;
             data.inactivePayload = inactivePayload;
+        } else {
+            data.activePayload = "ON";
+            data.inactivePayload = "OFF";
         }
 
         data.displayName = displayName;
         data.deviceID = deviceID;
         data.statusTopic = statusTopic;
         data.method = writeMethod === true ? "write" : "read";
+
+        if (statusPattern) {
+            data.statusPattern = statusPattern;
+        }
+        if (updatePattern) {
+            data.updatePattern = updatePattern;
+        }
 
         $.ajax({
             url: "/api/devices/",

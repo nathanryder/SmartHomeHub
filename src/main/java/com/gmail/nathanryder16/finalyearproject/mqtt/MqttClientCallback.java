@@ -34,7 +34,7 @@ public class MqttClientCallback implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage mqttMessage) {
-//        System.out.println("Arrived: " + topic + " - " + new String(mqttMessage.getPayload()));
+        System.out.println("Arrived: " + topic + " - " + new String(mqttMessage.getPayload()));
 
         List<Device> update = devices.findAllByStatusTopic(topic);
         String msg = new String(mqttMessage.getPayload());
@@ -44,15 +44,14 @@ public class MqttClientCallback implements MqttCallback {
 
             String status = null;
             if (device.getStatusPattern() != null) {
-                String t = "{\"status\":\"%s\"}";
+                String template = device.getStatusPattern().replace("%s", "(\\w+)").replace("\"", "\\\"");
+                template = "(.*)" + template.replace("{", "\\{").replace("}", "\\}") + "(.*)";
 
-                String template = device.getStatusPattern().replace("%s", "(.*)").replace("\"", "\\\"");
-                template = template.replace("{", "\\{").replace("}", "\\}");
                 Pattern pattern = Pattern.compile(template);
                 Matcher matcher = pattern.matcher(msg);
 
                 if (matcher.matches()) {
-                    status = matcher.group(1);
+                    status = matcher.group(2);
                 }
             }
 
@@ -65,12 +64,15 @@ public class MqttClientCallback implements MqttCallback {
             } else {
                 msg = "\"" + status + "\"";
             }
+            device.setLastStatus(msg);
+            devices.save(device);
+
+            msg = msg.replace(device.getInactivePayload(), "OFF").replace(device.getActivePayload(), "ON");
 
             System.out.println("Update: " + msg);
             simp.convertAndSend("/topic/update/" + device.getDeviceID(), "{\"deviceID\":\"" + device.getDeviceID() + "\", \"message\":" + msg + "}");
 
-            device.setLastStatus(msg);
-            devices.save(device);
+
         }
     }
 

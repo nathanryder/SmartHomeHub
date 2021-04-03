@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
-<div th:fragment="test (card, device)" th:id="${card.getType().name()}+'_'+${device.getDeviceID()}" th:class="'button_'+${device.getLastStatus().toLowerCase()}">
-    <h3>TEST CARD: <span th:text="${card.getType().name()}+'-'+${device.getDeviceID()}"></span></h3>
+<div class="button" th:fragment="test (card, device)" th:id="${card.getType().name()}+'_'+${device.getDeviceID()}" th:classappend="'button_'+${device.getLastStatus().toLowerCase()}">
+    <span class="status"></span><span>TEST CARD: <span th:text="${card.getType().name()}+'-'+${device.getDeviceID()}"></span></span>
 </div>
 
 </html>
