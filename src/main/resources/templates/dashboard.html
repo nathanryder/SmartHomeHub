@@ -19,7 +19,7 @@
     </div>
 
     <div th:each="card : ${dashboard.getCards()}">
-        <div class="devicecard" th:insert="fragments/testcard.html :: test(${card}, ${card.getDevice()})"></div>
+        <div class="devicecard" th:insert="'fragments/'+${card.getType().getFilename()} :: test(${card}, ${card.getDevice()})"></div>
     </div>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

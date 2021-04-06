@@ -1,0 +1,9 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div class="badge" th:fragment="test (card, device)" th:id="${card.getType().name()}+'_'+${device.getDeviceID()}">
+    <span class="smalltext" th:text="${device.getDisplayName()}"></span>
+    <br>
+    <span class="badge_status" th:id="${card.getType().name()}+'_'+${device.getDeviceID()}" th:text="${device.getLastStatus()}"></span>
+</div>
+
+</html>

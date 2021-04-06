@@ -44,9 +44,10 @@ public class MqttClientCallback implements MqttCallback {
 
             String status = null;
             if (device.getStatusPattern() != null) {
-                String template = device.getStatusPattern().replace("%s", "(\\w+)").replace("\"", "\\\"");
+                String template = device.getStatusPattern().replace("%s", "([a-zA-Z0-9\\.]+)").replace("\"", "\\\"");
                 template = "(.*)" + template.replace("{", "\\{").replace("}", "\\}") + "(.*)";
 
+                System.out.println("T: " + template);
                 Pattern pattern = Pattern.compile(template);
                 Matcher matcher = pattern.matcher(msg);
 
@@ -54,7 +55,6 @@ public class MqttClientCallback implements MqttCallback {
                     status = matcher.group(2);
                 }
             }
-
 
 
             if (status == null) {

@@ -1,0 +1,22 @@
+.badge {
+    background-color: white;
+    color: black;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: inline-block;
+    border: 2px solid black;
+    text-align: center;
+}
+
+.smalltext {
+    font-size: 10px;
+    position: relative;
+    top: 10px;
+}
+
+.badge_status {
+    position: relative;
+    top: 20px;
+    color: darkviolet;
+}

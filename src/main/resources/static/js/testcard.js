@@ -20,8 +20,6 @@ $(document).ready(function() {
                 } else if (status === "OFF") {
                     el.removeClass("button_on");
                     el.addClass("button_off");
-                } else {
-                    console.log("ERROR: Invalid status");
                 }
             });
 
@@ -35,7 +33,6 @@ $(document).ready(function() {
         var selected = $(this).attr("class");
 
         var status = "on";
-        console.log(selected)
         if (selected.includes("button_on")) {
             status = "off"
         }
