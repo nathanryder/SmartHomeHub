@@ -27,8 +27,6 @@ public class TestController {
     @GetMapping("/test")
     public String test(Model model) {
         List<Card> cards = new ArrayList<>();
-//        Card card = new Card("test");
-//        cards.add(card);
 
         model.addAttribute("cards", cards);
         return "test";
@@ -50,7 +48,7 @@ public class TestController {
 
     @RequestMapping("/login")
     public String login(HttpSession session) {
-//        session.setAttribute("loggedIn", "1");
+        session.setAttribute("loggedIn", "admin@localhost.com");
 
         if (session.getAttribute("loggedIn") != null)
             return "redirect:/dashboard/";
