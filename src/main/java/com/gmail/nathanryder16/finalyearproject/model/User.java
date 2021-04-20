@@ -18,11 +18,13 @@ public class User {
     private @Getter @Setter String email;
     private @Getter String password;
     private @Getter @Setter int validated;
+    private @Getter @Setter int superuser;
 
     public User(String email, String password, int validated) {
         this.email = email;
         this.validated = validated;
         this.id = UUID.randomUUID().toString().replace("-", "");
+        this.superuser = 0;
         setPassword(password);
     }
 

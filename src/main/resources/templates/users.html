@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/header :: files">
+    <title>Devices</title>
+</head>
+<body>
+<header th:insert="fragments/header.html :: header"></header>
+
+<div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <table class="table table-dark table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Email</th>
+            <th scope="col">Approved</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.getEmail()}"></td>
+            <td>
+                <span th:text="${user.getValidated} == 0 ? 'No' : 'Yes'"></span>
+                <img onclick="editUser(this)" th:value="${user.id}" style="float: right;" width="25" src="https://icons.iconarchive.com/icons/flat-icons.com/flat/256/Pencil-icon.png">
+                <img onclick="deleteUser(this)" th:value="${user.id}" style="float: right;" width="25" src="https://www.uidownload.com/files/240/295/614/delete-icon.jpg">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<footer th:insert="fragments/header.html :: footer"></footer>
+
+<script>
+
+    function editUser(el) {
+        var id = $(el).attr("value");
+        window.location = "/editUser/" + id;
+    }
+
+    function deleteUser(el) {
+        var id = $(el).attr("value");
+
+        $.ajax({
+            url: "/api/users/" + id,
+            type: "DELETE",
+            success: function() {
+                window.location.href = "/users";
+            },
+            error: function(err) {
+                if (err.responseJSON.error === undefined) {
+                    error.html("Server error occured");
+                    return;
+                }
+
+                error.html(err.responseJSON.error);
+                $("#error").css({"visibility": "visible"});
+            }
+        });
+
+
+    }
+
+</script>
+</body>
+</html>

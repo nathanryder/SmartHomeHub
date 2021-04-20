@@ -1,7 +1,10 @@
 package com.gmail.nathanryder16.finalyearproject.mqtt;
 
+import com.gmail.nathanryder16.finalyearproject.ScriptTrigger;
 import com.gmail.nathanryder16.finalyearproject.model.Device;
+import com.gmail.nathanryder16.finalyearproject.model.Script;
 import com.gmail.nathanryder16.finalyearproject.repository.DeviceRepository;
+import com.gmail.nathanryder16.finalyearproject.repository.ScriptRepository;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -23,6 +26,9 @@ public class MqttClientCallback implements MqttCallback {
     private DeviceRepository devices;
 
     @Autowired
+    private ScriptRepository scriptRepo;
+
+    @Autowired
     private SimpMessagingTemplate simp;
 
     @Override
@@ -40,7 +46,6 @@ public class MqttClientCallback implements MqttCallback {
         String msg = new String(mqttMessage.getPayload());
 
         for (Device device : update) {
-            System.out.println("Update status of: " + device.getDisplayName());
 
             String status = null;
             if (device.getStatusPattern() != null) {
@@ -72,7 +77,14 @@ public class MqttClientCallback implements MqttCallback {
             System.out.println("Update: " + msg);
             simp.convertAndSend("/topic/update/" + device.getDeviceID(), "{\"deviceID\":\"" + device.getDeviceID() + "\", \"message\":" + msg + "}");
 
+        }
 
+        //Check if script wants to trigger based on MQTT_TOPIC
+        List<Script> scripts = scriptRepo.findByTriggerType(ScriptTrigger.MQTT_TOPIC);
+        for (Script script : scripts) {
+            if (script.getTriggerValue().equals(topic)) {
+                script.run(msg);
+            }
         }
     }
 

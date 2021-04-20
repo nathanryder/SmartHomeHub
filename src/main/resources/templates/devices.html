@@ -20,7 +20,11 @@
         <tbody>
         <tr th:each="device : ${devices}">
             <td th:text="${device.displayName}"></td>
-            <td th:text="${device.deviceID}"></td>
+            <td>
+                <span th:text="${device.deviceID}"></span>
+                <img style="float: right;" width="25" src="https://icons.iconarchive.com/icons/flat-icons.com/flat/256/Pencil-icon.png">
+                <img style="float: right;" width="25" src="https://www.uidownload.com/files/240/295/614/delete-icon.jpg">
+            </td>
         </tr>
         </tbody>
     </table>

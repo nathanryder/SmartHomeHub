@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/header :: files">
+    <title>Dashboard</title>
+</head>
+<body>
+<header th:insert="fragments/header.html :: header"></header>
+
+<style>
+    .form-group {
+        padding: 5px;
+    }
+</style>
+
+<div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+    <div class="container">
+        <div style="visibility: hidden;" class="alert alert-danger" id="error"></div>
+
+        <form>
+            <div class="form-group">
+                <label for="email">Name</label>
+                <input th:disabled="${user.getSuperuser()} == 1 ? 'true'" th:value="${user.getEmail()}" type="text" class="form-control" id="email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input th:disabled="${user.getSuperuser()} == 1 ? 'true'" type="password" class="form-control" id="password">
+            </div>
+            <div class="form-group">
+                <label for="validated">Enabled</label>
+                <input th:disabled="${user.getSuperuser()} == 1 ? 'true'" th:checked="${user.getValidated()} == 1 ? 'checked'" type="checkbox" id="validated">
+            </div>
+
+            <button th:disabled="${user.getSuperuser()} == 1 ? 'true'" id="save" type="submit" class="btn btn-primary">Save</button>
+        </form>
+
+
+    </div>
+
+</div>
+
+<script>
+    $("#save").click(function (e) {
+        e.preventDefault();
+
+        var email = $("#email").val();
+        var password = $("#password").val();
+        var validated = $("#validated");
+        validated = validated.is(":checked") ? 1 : 0;
+
+        var data = {};
+        data.email = email;
+        data.password = password;
+        data.validated = validated;
+
+        $.ajax({
+            url: "/api/users/[[${user.getId()}]]",
+            type: "PUT",
+            data: data,
+            success: function() {
+                window.location.href = "/users";
+            },
+            error: function(err) {
+                if (err.responseJSON.error === undefined) {
+                    error.html("Server error occured");
+                    return;
+                }
+
+                error.html(err.responseJSON.error);
+                $("#error").css({"visibility": "visible"});
+            }
+        });
+    });
+</script>
+
+<footer th:insert="fragments/header.html :: footer"></footer>
+</body>
+</html>

@@ -3,20 +3,26 @@ package com.gmail.nathanryder16.finalyearproject.controller;
 import com.gmail.nathanryder16.finalyearproject.cards.Card;
 import com.gmail.nathanryder16.finalyearproject.cards.CardType;
 import com.gmail.nathanryder16.finalyearproject.dashboard.Dashboard;
+import com.gmail.nathanryder16.finalyearproject.model.User;
+import com.gmail.nathanryder16.finalyearproject.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class TestController {
+
+    @Autowired
+    private UserService users;
 
     @GetMapping("/test")
     public String test(Model model) {
@@ -26,6 +32,12 @@ public class TestController {
 
         model.addAttribute("cards", cards);
         return "test";
+    }
+
+    @RequestMapping("/logout")
+    public String logout(HttpSession session) {
+        session.setAttribute("loggedIn", null);
+        return "redirect:/login/";
     }
 
     @RequestMapping("register")
@@ -38,8 +50,7 @@ public class TestController {
 
     @RequestMapping("/login")
     public String login(HttpSession session) {
-        session.setAttribute("loggedIn", "1");
-
+//        session.setAttribute("loggedIn", "1");
 
         if (session.getAttribute("loggedIn") != null)
             return "redirect:/dashboard/";
@@ -53,6 +64,30 @@ public class TestController {
             return "redirect:/login/";
 
         return "redirect:/dashboard/";
+    }
+
+    @RequestMapping("/users")
+    public String users(HttpSession session, Model model) {
+        if (session.getAttribute("loggedIn") == null)
+            return "redirect:/login/";
+
+        model.addAttribute("users", users.findAll());
+        session.setAttribute("page", "users");
+        return "users";
+    }
+
+    @RequestMapping("/editUser/{userId}")
+    public String users(@PathVariable("userId") String userId, HttpSession session, Model model) {
+        if (session.getAttribute("loggedIn") == null)
+            return "redirect:/login/";
+
+        Optional<User> user = users.findById(userId);
+        if (user.isEmpty()) {
+            return "users";
+        }
+
+        model.addAttribute("user", user.get());
+        return "editUser";
     }
 
     @RequestMapping("/dashboard")

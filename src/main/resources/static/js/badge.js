@@ -6,7 +6,6 @@ $(document).ready(function() {
         $(".badge").each(function (i, badge) {
 
             var id = badge.querySelector(".badge_status").id;
-            console.log("ID: " + id);
             var deviceId = id.split("_")[1];
 
             id = id.replace(".", "\\\.");
@@ -14,9 +13,6 @@ $(document).ready(function() {
                 console.log(msg);
                 var status = JSON.parse(msg.body).message;
                 badge.querySelector(".badge_status").innerHTML = status;
-
-                console.log("Updated: " + status)
-
 
             });
 

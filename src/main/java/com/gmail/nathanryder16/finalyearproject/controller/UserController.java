@@ -34,17 +34,17 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg);
         }
 
-        User user = new User(email, password, 1);
+        User user = new User(email, password, 0);
         users.save(user);
 
-        session.setAttribute("loggedIn", user.getEmail());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping
-    public ResponseEntity<Object> editUser(@RequestParam("userId") String userId,
+    @PutMapping(value = "/{userId}", produces = "application/json")
+    public ResponseEntity<Object> editUser(@PathVariable("userId") String userId,
                                            @RequestParam("password") String password,
-                                           @RequestParam("email") String email) {
+                                           @RequestParam("email") String email,
+                                           @RequestParam("validated") int validated) {
 
         Optional<User> ouser = users.findById(userId);
         if (ouser.isEmpty()) {
@@ -55,14 +55,18 @@ public class UserController {
         User user = ouser.get();
 
         user.setEmail(email);
-        user.setPassword(password);
+
+        if (password != null && !password.equals("")) {
+            user.setPassword(password);
+        }
+        user.setValidated(validated);
 
         users.save(user);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @DeleteMapping
-    public ResponseEntity<Object> deleteUser(@RequestParam("userId") String userId) {
+    @DeleteMapping(value = "/{userId}", produces = "application/json")
+    public ResponseEntity<Object> deleteUser(@PathVariable("userId") String userId) {
 
         Optional<User> ouser = users.findById(userId);
         if (ouser.isEmpty()) {
@@ -82,6 +86,10 @@ public class UserController {
         if (user == null) {
             JsonObject msg = new JsonParser().parse("{\"error\": \"invalid email address\"}").getAsJsonObject();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg);
+        }
+
+        if (user.getValidated() == 0) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
