@@ -9,11 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("api/users")
@@ -35,13 +34,44 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg);
         }
 
-        String hashed = BCrypt.withDefaults().hashToString(12, password.toCharArray());
-
-        User user = new User(email, hashed, 1);
+        User user = new User(email, password, 1);
         users.save(user);
 
         session.setAttribute("loggedIn", user.getEmail());
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PutMapping
+    public ResponseEntity<Object> editUser(@RequestParam("userId") String userId,
+                                           @RequestParam("password") String password,
+                                           @RequestParam("email") String email) {
+
+        Optional<User> ouser = users.findById(userId);
+        if (ouser.isEmpty()) {
+            JsonObject msg = new JsonParser().parse("{\"error\": \"invalid user id\"}").getAsJsonObject();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg);
+        }
+
+        User user = ouser.get();
+
+        user.setEmail(email);
+        user.setPassword(password);
+
+        users.save(user);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Object> deleteUser(@RequestParam("userId") String userId) {
+
+        Optional<User> ouser = users.findById(userId);
+        if (ouser.isEmpty()) {
+            JsonObject msg = new JsonParser().parse("{\"error\": \"invalid user id\"}").getAsJsonObject();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg);
+        }
+
+        users.delete(ouser.get());
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping(value = "/auth", produces = "application/json")

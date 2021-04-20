@@ -1,5 +1,6 @@
 package com.gmail.nathanryder16.finalyearproject.model;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,17 +16,21 @@ public class User {
     @Id
     private @Getter @Setter String id;
     private @Getter @Setter String email;
-    private @Getter @Setter String password;
+    private @Getter String password;
     private @Getter @Setter int validated;
 
     public User(String email, String password, int validated) {
         this.email = email;
-        this.password = password;
         this.validated = validated;
         this.id = UUID.randomUUID().toString().replace("-", "");
+        setPassword(password);
     }
 
     public User() {
 
+    }
+
+    public void setPassword(String password) {
+        this.password = BCrypt.withDefaults().hashToString(12, password.toCharArray());
     }
 }
