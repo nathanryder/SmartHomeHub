@@ -2,7 +2,7 @@ package com.gmail.nathanryder16.finalyearproject.controller;
 
 import com.gmail.nathanryder16.finalyearproject.cards.Card;
 import com.gmail.nathanryder16.finalyearproject.cards.CardType;
-import com.gmail.nathanryder16.finalyearproject.dashboard.Dashboard;
+import com.gmail.nathanryder16.finalyearproject.model.Dashboard;
 import com.gmail.nathanryder16.finalyearproject.model.User;
 import com.gmail.nathanryder16.finalyearproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.gmail.nathanryder16.finalyearproject.websocket;
+package com.gmail.nathanryder16.finalyearproject.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

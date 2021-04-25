@@ -1,9 +1,8 @@
-package com.gmail.nathanryder16.finalyearproject.dashboard;
+package com.gmail.nathanryder16.finalyearproject.model;
 
-import com.gmail.nathanryder16.finalyearproject.SpringContext;
+import com.gmail.nathanryder16.finalyearproject.configuration.SpringContext;
 import com.gmail.nathanryder16.finalyearproject.cards.Card;
 import com.gmail.nathanryder16.finalyearproject.cards.CardType;
-import com.gmail.nathanryder16.finalyearproject.model.Device;
 import com.gmail.nathanryder16.finalyearproject.repository.DeviceRepository;
 import lombok.Getter;
 import org.yaml.snakeyaml.Yaml;

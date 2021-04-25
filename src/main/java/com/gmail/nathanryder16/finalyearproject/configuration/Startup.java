@@ -1,4 +1,4 @@
-package com.gmail.nathanryder16.finalyearproject;
+package com.gmail.nathanryder16.finalyearproject.configuration;
 
 import com.gmail.nathanryder16.finalyearproject.model.User;
 import com.gmail.nathanryder16.finalyearproject.service.UserService;

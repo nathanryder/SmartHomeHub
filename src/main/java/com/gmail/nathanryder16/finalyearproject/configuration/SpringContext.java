@@ -1,4 +1,4 @@
-package com.gmail.nathanryder16.finalyearproject;
+package com.gmail.nathanryder16.finalyearproject.configuration;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

@@ -1,0 +1,189 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/header :: files">
+    <title>Dashboard</title>
+</head>
+<body>
+<header th:insert="fragments/header.html :: header"></header>
+
+<style>
+    .form-group {
+        padding: 5px;
+    }
+</style>
+
+<div class="offset-lg-3 offset-md-3 col-md-6 col-lg-6 px-md-4">
+
+    <div class="container">
+        <div style="visibility: hidden; margin-top: 20px;" class="alert alert-danger" id="error"></div>
+
+        <div id="mysql">
+            <center><h2>MySql Connection Details</h2></center>
+            <form>
+                <div class="form-group">
+                    <label for="sqlHost">Host</label>
+                    <input type="text" class="form-control" id="sqlHost" th:value="${sqlHost}">
+                </div>
+                <div class="form-group">
+                    <label for="sqlPort">Port</label>
+                    <input type="number" class="form-control" id="sqlPort" th:value="${sqlPort}">
+                </div>
+                <div class="form-group">
+                    <label for="sqlUser">Username</label>
+                    <input type="text" class="form-control" id="sqlUser"th:value="${sqlUser}">
+                </div>
+                <div class="form-group">
+                    <label for="sqlPassword">Password</label>
+                    <input type="password" class="form-control" id="sqlPassword">
+                </div>
+                <div class="form-group">
+                    <label for="sqlDatabase">Database</label>
+                    <input type="text" class="form-control" id="sqlDatabase" th:value="${sqlDatabase}">
+                </div>
+
+                <br>
+                <button id="sqlNext" type="submit" class="btn btn-primary">Next</button>
+            </form>
+        </div>
+
+        <div id="mqtt" hidden>
+            <center><h2>MQTT Connection Details</h2></center>
+            <form>
+                <div class="form-group">
+                    <label for="mqttHost">Host</label>
+                    <input type="text" class="form-control" id="mqttHost" th:value="${mqttHost}">
+                </div>
+                <div class="form-group">
+                    <label for="mqttPort">Port</label>
+                    <input type="number" class="form-control" id="mqttPort" th:value="${mqttPort}">
+                </div>
+                <div class="form-group">
+                    <label for="mqttUser">Username</label>
+                    <input type="text" class="form-control" id="mqttUser" th:value="${mqttUser}">
+                </div>
+                <div class="form-group">
+                    <label for="mqttPassword">Password</label>
+                    <input type="password" class="form-control" id="mqttPassword">
+                </div>
+
+                <br>
+                <button id="mqttNext" type="submit" class="btn btn-primary">Next</button>
+            </form>
+        </div>
+
+        <div id="web" hidden>
+            <center><h2>Web Details</h2></center>
+            <form>
+                <div class="form-group">
+                    <label for="webPort">Website Port</label>
+                    <input type="number" class="form-control" id="webPort"  th:value="${webPort}">
+                </div>
+                <div class="form-group">
+                    <label for="adminPass">Admin Password</label>
+                    <input type="password" class="form-control" id="adminPass">
+                </div>
+
+                <br>
+                <button id="webNext" type="submit" class="btn btn-primary">Finish</button>
+            </form>
+        </div>
+
+
+    </div>
+
+</div>
+
+<script>
+    $("#sqlNext").click(function (e) {
+        e.preventDefault();
+
+        var error = $("#error");
+        window.sqlHost = $("#sqlHost").val();
+        window.sqlPort = $("#sqlPort").val();
+        window.sqlUser = $("#sqlUser").val();
+        window.sqlPasswd = $("#sqlPassword").val();
+        window.sqlDatabase = $("#sqlDatabase").val();
+
+        if (!sqlHost || !sqlPort || !sqlUser || !sqlDatabase) {
+            error.html("Please fill out all the required fields!");
+            error.css({"visibility": "visible"});
+            return;
+        }
+
+        error.html("");
+        $("#mysql").attr("hidden", true);
+        $("#mqtt").attr("hidden", false);
+    });
+
+    $("#mqttNext").click(function (e) {
+        e.preventDefault();
+
+        var error = $("#error");
+        window.mqttHost = $("#mqttHost").val();
+        window.mqttPort = $("#mqttPort").val();
+        window.mqttUser = $("#mqttUser").val();
+        window.mqttPasswd = $("#mqttPassword").val();
+
+        if (!mqttHost || !mqttPort || !mqttUser) {
+            error.html("Please fill out all the required fields!");
+            error.css({"visibility": "visible"});
+            return;
+        }
+
+        error.html("");
+        $("#mqtt").attr("hidden", true);
+        $("#web").attr("hidden", false);
+    });
+
+    $("#webNext").click(function (e) {
+        e.preventDefault();
+
+        var error = $("#error");
+        window.webPort = $("#webPort").val();
+        window.adminPass = $("#adminPass").val();
+
+        if (!webPort) {
+            error.html("Please fill out all the required fields!");
+            error.css({"visibility": "visible"});
+            return;
+        }
+
+        var data = {};
+        data.sqlHost = window.sqlHost;
+        data.sqlPort = window.sqlPort;
+        data.sqlUser = window.sqlUser;
+        data.sqlPasswd = window.sqlPasswd;
+        data.sqlDatabase = window.sqlDatabase;
+        data.mqttHost = window.mqttHost;
+        data.mqttPort = window.mqttPort;
+        data.mqttUser = window.mqttUser;
+        data.mqttPasswd = window.mqttPasswd;
+        data.webPort = window.webPort;
+        data.adminPass = window.adminPass;
+
+        $.ajax({
+            url: "/settings/edit/",
+            type: "PUT",
+            data: data,
+            success: function() {
+                window.location.href = "/dashboard";
+            },
+            error: function(err) {
+                if (err.responseJSON.error === undefined) {
+                    error.html("Server error occured");
+                    return;
+                }
+
+                error.html(err.responseJSON.error);
+                $("#error").css({"visibility": "visible"});
+            }
+        });
+
+    });
+
+
+</script>
+
+<footer th:insert="fragments/header.html :: footer"></footer>
+</body>
+</html>

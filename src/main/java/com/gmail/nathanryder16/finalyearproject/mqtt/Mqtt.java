@@ -1,5 +1,6 @@
 package com.gmail.nathanryder16.finalyearproject.mqtt;
 
+import com.gmail.nathanryder16.finalyearproject.model.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -12,14 +13,15 @@ public class Mqtt {
     @Autowired
     private MqttClientPublish mqttClient;
 
+    @Autowired
+    private Config config;
+
     @Bean
     public MqttClientPublish getMqttClient() {
-        String host = "tcp://192.168.15.3:1883";
+        String host = "tcp://" + config.getMqttHost() +":" + config.getMqttPort();
         String clientId = "smartHub";
-        String username = "mosquitto";
-        String password = "mosquittopasswd";
 
-        mqttClient.connect(host, clientId, username, password);
+        mqttClient.connect(host, clientId, config.getMqttUser(), config.getMqttPassword());
         mqttClient.subscribe("#");
 
         return mqttClient;
