@@ -9,6 +9,7 @@ import org.aspectj.util.FileUtil;
 import javax.persistence.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 @Entity
 @Table(name = "scripts")
@@ -45,7 +46,7 @@ public class Script {
                 parent.mkdir();
             }
 
-            scriptPath = "test.py";
+            scriptPath = id + "-" + UUID.randomUUID().toString().split("-")[0] + ".py";
         }
 
         File f = new File("scripts" + File.separator + scriptPath);
@@ -72,6 +73,10 @@ public class Script {
         return null;
     }
 
+    public void run() {
+        run(null);
+    }
+
     public void run(String message) {
 
         String header = "import os,sys,inspect\n" +
@@ -91,7 +96,9 @@ public class Script {
             header += "from " + fileData[0] + " import *\n\n";
         }
 
-        header += "message = ' '.join(sys.argv[1:])";
+        if (message != null) {
+            header += "message = ' '.join(sys.argv[1:])";
+        }
 
         //Take arguments
 
