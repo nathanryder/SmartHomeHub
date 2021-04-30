@@ -1,8 +1,9 @@
 package com.gmail.nathanryder16.finalyearproject;
 
 import com.gmail.nathanryder16.finalyearproject.model.Device;
+import com.gmail.nathanryder16.finalyearproject.model.Script;
 import com.gmail.nathanryder16.finalyearproject.mqtt.MqttClientPublish;
-import com.gmail.nathanryder16.finalyearproject.repository.DeviceRepository;
+import com.gmail.nathanryder16.finalyearproject.repository.ScriptRepository;
 import com.gmail.nathanryder16.finalyearproject.service.DeviceService;
 import com.google.api.gax.rpc.ClientStream;
 import com.google.api.gax.rpc.ResponseObserver;
@@ -13,7 +14,6 @@ import com.google.protobuf.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.sound.sampled.AudioFormat;
@@ -32,6 +32,9 @@ public class Voice {
 
     @Autowired
     private DeviceService deviceRepo;
+
+    @Autowired
+    private ScriptRepository scriptRepo;
 
     @Qualifier("mqttClientPublish")
     @Autowired
@@ -70,6 +73,17 @@ public class Voice {
                 mqttClient.publish(topic, payload);
             }
         }
+
+        //Script
+        for (Script script : scriptRepo.findAll()) {
+            if (script.getTriggerType() != ScriptTrigger.VOICE)
+                continue;
+
+            if (cmd.contains(script.getTriggerValue().toLowerCase())) {
+                script.run(cmd.replace(script.getTriggerValue(), ""));
+            }
+        }
+
     }
 
     @Bean
@@ -131,13 +145,10 @@ public class Voice {
 
                         @Override
                         public void onError(Throwable throwable) {
-                            System.out.println("Error");
-                            throwable.printStackTrace();
                         }
 
                         @Override
                         public void onComplete() {
-                            System.out.println("Complete");
                         }
                     };
 

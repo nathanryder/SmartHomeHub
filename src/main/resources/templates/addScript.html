@@ -60,6 +60,16 @@
                 "<label for='triggerValue'>Topic</label>" +
                 "<input class='form-control' type='text' id='triggerValue'>" +
                 "</div>";
+        } else if (value === "TIME") {
+            html += "<div class='form-group'>" +
+                "<label for='triggerValue'>Time</label>" +
+                "<input class='form-control' type='text' id='triggerValue'>" +
+                "</div>";
+        } else if (value === "VOICE") {
+            html += "<div class='form-group'>" +
+                "<label for='triggerValue'>Command</label>" +
+                "<input class='form-control' type='text' id='triggerValue'>" +
+                "</div>";
         }
 
         opts.css({"visibility": "visible"});
