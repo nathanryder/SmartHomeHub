@@ -58,7 +58,6 @@ public class ScriptController {
 
     @DeleteMapping(value = "api/scripts/{scriptId}", produces = "application/json")
     public ResponseEntity deleteScript(@PathVariable(value="scriptId") int scriptId) {
-
         Script script = scripts.getRepo().findById(scriptId);
         if (script == null) {
             JsonObject msg = new JsonParser().parse("{\"error\": \"Script not found!\"}").getAsJsonObject();
@@ -83,7 +82,8 @@ public class ScriptController {
 
         scripts.save(script);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        JsonObject msg = new JsonParser().parse("{\"id\": \"" + script.getId() + "\"}").getAsJsonObject();
+        return ResponseEntity.status(HttpStatus.CREATED).body(msg);
     }
 
     @PutMapping(value = "api/scripts/{scriptId}", produces = "application/json")

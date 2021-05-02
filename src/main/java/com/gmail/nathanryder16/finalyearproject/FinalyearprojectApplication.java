@@ -3,11 +3,14 @@ package com.gmail.nathanryder16.finalyearproject;
 import com.gmail.nathanryder16.finalyearproject.model.Config;
 import com.gmail.nathanryder16.finalyearproject.model.Script;
 import com.gmail.nathanryder16.finalyearproject.repository.ScriptRepository;
+import com.gmail.nathanryder16.finalyearproject.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -16,10 +19,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 @SpringBootApplication
-public class FinalyearprojectApplication {
+public class FinalyearprojectApplication implements CommandLineRunner {
 
 	@Autowired
 	private ScriptRepository scriptRepo;
+
+	@Autowired
+	private StorageService storage;
 
 	public static void main(String[] args) {
 		Config config = new Config(true);
@@ -66,4 +72,8 @@ public class FinalyearprojectApplication {
 	}
 
 
+	@Override
+	public void run(String... args) throws Exception {
+		storage.init();
+	}
 }

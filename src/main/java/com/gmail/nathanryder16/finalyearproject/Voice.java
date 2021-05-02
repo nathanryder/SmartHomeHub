@@ -5,25 +5,29 @@ import com.gmail.nathanryder16.finalyearproject.model.Script;
 import com.gmail.nathanryder16.finalyearproject.mqtt.MqttClientPublish;
 import com.gmail.nathanryder16.finalyearproject.repository.ScriptRepository;
 import com.gmail.nathanryder16.finalyearproject.service.DeviceService;
+import com.google.api.gax.core.CredentialsProvider;
+import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.api.gax.rpc.ClientStream;
 import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.StreamController;
+import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.speech.v1p1beta1.*;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.TargetDataLine;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -39,6 +43,9 @@ public class Voice {
     @Qualifier("mqttClientPublish")
     @Autowired
     private MqttClientPublish mqttClient;
+
+    @Autowired
+    private FileStorage storage;
 
     private static StreamController controller;
     private static int endTime = 0;
@@ -91,6 +98,10 @@ public class Voice {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Resource res = storage.loadAsResource();
+                if (res == null) {
+                    return;
+                }
 
                 BlockingQueue<byte[]> queue = new LinkedBlockingQueue();
 
@@ -115,9 +126,18 @@ public class Voice {
                     }
                 });
 
+                SpeechSettings speechSettings;
+                try {
+                    ServiceAccountCredentials file = ServiceAccountCredentials.fromStream(res.getInputStream());
+                    CredentialsProvider creds = FixedCredentialsProvider.create(file);
+                    speechSettings = SpeechSettings.newBuilder().setCredentialsProvider(creds).build();
+                } catch (IOException e) {
+                    System.out.println("[WARN] Failed to find voice credentials file. Voice commands will not work.");
+                    return;
+                }
 
                 ResponseObserver<StreamingRecognizeResponse> response = null;
-                try (SpeechClient client = SpeechClient.create()) {
+                try (SpeechClient client = SpeechClient.create(speechSettings)) {
                     ClientStream<StreamingRecognizeRequest> stream;
 
                     response = new ResponseObserver<>() {
@@ -164,8 +184,8 @@ public class Voice {
                         DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
 
                         if (!AudioSystem.isLineSupported(info)) {
-                            System.out.println("Failed to find a supported microphone!");
-                            System.exit(1);
+                            System.out.println("[WARN] Failed to find a supported microphone! Voice commands will not work.");
+                            return;
                         }
 
                         dataLine = (TargetDataLine) AudioSystem.getLine(info);

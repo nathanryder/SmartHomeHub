@@ -62,7 +62,17 @@
                 "<label for='topic'>Topic</label>" +
                 "<input value='" + triggerValue + "' class='form-control' type='text' id='triggerValue'>" +
                 "</div>";
-        }
+        }else if (value === "TIME") {
+            html += "<div class='form-group'>" +
+                "<label for='triggerValue'>Time</label>" +
+                "<input value='" + triggerValue + "' class='form-control' type='text' id='triggerValue'>" +
+                "</div>";
+        } else if (value === "VOICE") {
+            html += "<div class='form-group'>" +
+                "<label for='triggerValue'>Command</label>" +
+                "<input value='" + triggerValue + "' class='form-control' type='text' id='triggerValue'>" +
+                "</div>";
+        }``
 
         opts.css({"visibility": "visible"});
         opts.html(html);

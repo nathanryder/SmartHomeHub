@@ -8,6 +8,7 @@ target/
 *.pyc
 config.yml
 scripts/test.py
+credentials.json
 
 ### STS ###
 .apt_generated

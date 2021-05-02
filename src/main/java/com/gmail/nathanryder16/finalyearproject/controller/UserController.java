@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -37,7 +39,8 @@ public class UserController {
         User user = new User(email, password, 0);
         users.save(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        JsonObject msg = new JsonParser().parse("{\"id\": \"" + user.getId() + "\"}").getAsJsonObject();
+        return ResponseEntity.status(HttpStatus.CREATED).body(msg);
     }
 
     @PutMapping(value = "/{userId}", produces = "application/json")
