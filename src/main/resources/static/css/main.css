@@ -1,13 +1,40 @@
-h1 {
-    color: red;
-}
-
 body {
-    background-color: grey !important;
+    background-color: #FBFBF8;
 }
 
 .center {
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+.table-dark {
+    --bs-table-bg: #2B353E;
+    --bs-table-striped-bg: #435361;
+    --bs-table-active-bg: #435361;
+    --bs-table-hover-bg: #242C34;
+}
+
+.btn-primary {
+    background-color: #01b1a3;
+    border-color: #01b1a3;
+}
+.btn-primary:hover {
+    background-color: #008D82;
+    border-color: #008D82;
+}
+
+.btn-primary:active {
+    background-color: #008D82;
+    border-color: #008D82;
+}
+
+
+.loginbox {
+    background-color: #2B353E;
+    margin-left: 10%;
+    margin-right: 10%;
+    padding-bottom: 50px;
+    border-radius: 5px;
+    color: white;
 }

@@ -14,7 +14,7 @@
             Add Card
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" th:each="card : ${availableCards}" class="dropdown-item" href="#" th:text="${card.toString()}"></button>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#popup" th:each="card : ${availableCards}" class="dropdown-item" href="#" th:text="${card.toString()}"></button>
         </div>
     </div>
 
@@ -22,17 +22,16 @@
         <div class="devicecard" th:insert="'fragments/'+${card.getType().getFilename()} :: test(${card}, ${card.getDevice()})"></div>
     </div>
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="popup" tabindex="-1" aria-labelledby="popupLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Card</h5>
+                    <h5 class="modal-title" id="popupLabel">Add Card</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
                     <span id="error"></span>
-<!--                    <span style="visibility: hidden;" class="alert alert-danger" id="error"></span>-->
 
                     <input type="hidden" class="form-control" id="type">
                     <div class="input-group mb-3">
@@ -49,17 +48,13 @@
     </div>
 
     <script>
-        var exampleModal = document.getElementById('exampleModal');
-        exampleModal.addEventListener('show.bs.modal', function (event) {
+        var popup = document.getElementById('popup');
+        popup.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget;
-            var type = button.textContent;
-
-            var typeEl = exampleModal.querySelector('#type');
-            typeEl.value = type
+            popup.querySelector('#type').value = button.textContent;
         });
 
         $("#addCard").click(function() {
-
             var type = $("#type").val();
             var deviceID = $("#deviceID").val();
 
@@ -67,7 +62,6 @@
                 "cardType": type,
                 "deviceID": deviceID
             };
-            console.log(data.responseJSON);
 
             $.ajax({
                 url: "/api/dashboards/",

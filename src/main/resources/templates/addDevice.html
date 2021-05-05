@@ -15,8 +15,9 @@
 <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
     <div class="container">
-        <div style="visibility: hidden;" class="alert alert-danger" id="error"></div>
+        <center><h2>Add a new device</h2></center>
 
+        <div style="visibility: hidden;" class="alert alert-danger" id="error"></div>
         <form>
             <div class="form-group">
                 <label for="displayName">Display Name</label>
@@ -35,9 +36,14 @@
                 <label for="statusTopic">Status Pattern</label>
                 <input type="text" class="form-control" id="statusPattern">
             </div>
+
             <div class="form-group">
-                <label for="statusTopic">Update Pattern</label>
-                <input type="text" class="form-control" id="updatePattern">
+                <label for="activePayload">Active Payload</label>
+                <input type="text" class="form-control" id="activePayload">
+            </div>
+            <div class="form-group">
+                <label for="inactivePayload">Inactive Payload</label>
+                <input type="text" class="form-control" id="inactivePayload">
             </div>
 
             <label>Method</label>
@@ -59,12 +65,8 @@
                 <input type="text" class="form-control" id="updateTopic">
             </div>
             <div class="form-group">
-                <label for="activePayload">Active Payload</label>
-                <input type="text" class="form-control" id="activePayload">
-            </div>
-            <div class="form-group">
-                <label for="inactivePayload">Inactive Payload</label>
-                <input type="text" class="form-control" id="inactivePayload">
+                <label for="updatePattern">Update Pattern</label>
+                <input type="text" class="form-control" id="updatePattern">
             </div>
 
             <button id="addDevice" type="submit" class="btn btn-primary">Add Device</button>
@@ -76,13 +78,11 @@
 <script>
     $("#method-read").change(function(e) {
         $("#updateTopic").attr("readonly", true);
-        $("#activePayload").attr("readonly", true);
-        $("#inactivePayload").attr("readonly", true);
+        $("#updatePattern").attr("readonly", true);
     });
     $("#method-write").change(function(e) {
         $("#updateTopic").attr("readonly", false);
-        $("#activePayload").attr("readonly", false);
-        $("#inactivePayload").attr("readonly", false);
+        $("#updatePattern").attr("readonly", false);
     });
 
     $("#addDevice").click(function (e) {

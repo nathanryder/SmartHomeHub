@@ -25,7 +25,9 @@ public class UserController {
 
     @PostMapping(value = "/", produces = "application/json")
     public ResponseEntity<Object> addUser(@RequestParam("password") String password,
-                                          @RequestParam("email") String email, HttpSession session) {
+                                          @RequestParam("email") String email,
+                                          @RequestParam(value = "enabled", required = false, defaultValue = "0") int enabled,
+                                          HttpSession session) {
 
         if (!users.isEmailValid(email)) {
             JsonObject msg = new JsonParser().parse("{\"error\": \"invalid email address\"}").getAsJsonObject();
@@ -36,7 +38,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg);
         }
 
-        User user = new User(email, password, 0);
+        User user = new User(email, password, enabled);
         users.save(user);
 
         JsonObject msg = new JsonParser().parse("{\"id\": \"" + user.getId() + "\"}").getAsJsonObject();
@@ -56,7 +58,6 @@ public class UserController {
         }
 
         User user = ouser.get();
-
         user.setEmail(email);
 
         if (password != null && !password.equals("")) {

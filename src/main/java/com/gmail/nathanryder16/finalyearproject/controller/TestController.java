@@ -48,7 +48,7 @@ public class TestController {
 
     @RequestMapping("/login")
     public String login(HttpSession session) {
-        session.setAttribute("loggedIn", "admin@localhost.com");
+//        session.setAttribute("loggedIn", "admin@localhost.com");
 
         if (session.getAttribute("loggedIn") != null)
             return "redirect:/dashboard/";
@@ -86,6 +86,14 @@ public class TestController {
 
         model.addAttribute("user", user.get());
         return "editUser";
+    }
+
+    @RequestMapping("/addUser")
+    public String addUser(HttpSession session) {
+        if (session.getAttribute("loggedIn") == null)
+            return "redirect:/login/";
+
+        return "addUser";
     }
 
     @RequestMapping("/dashboard")
