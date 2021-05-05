@@ -8,6 +8,7 @@
     <link href="/css/main.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/d889d69fad.js" crossorigin="anonymous"></script>
     <link th:each="path : ${cssPaths}" th:href="${path}" rel="stylesheet">
+    <title th:text="'SmartHub | '+${title}"></title>
 </head>
 
 <footer th:fragment="footer">

@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: files(title='Add Device')">
+<head th:insert="fragments/header :: files(title='Edit Device')">
 </head>
 <body>
 <header th:insert="fragments/header.html :: header"></header>
@@ -14,46 +14,46 @@
 <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
     <div class="container">
-        <center><h2>Add a new device</h2></center>
+        <center><h2>Editing Device</h2></center>
 
         <div style="visibility: hidden;" class="alert alert-danger" id="error"></div>
         <form>
             <div class="form-group">
                 <label for="displayName">Display Name</label>
-                <input type="text" class="form-control" id="displayName">
+                <input th:value="${device.getDisplayName()}" type="text" class="form-control" id="displayName">
             </div>
             <div class="form-group">
                 <label for="deviceID">Device ID</label>
-                <input type="text" class="form-control" id="deviceID">
+                <input th:value="${device.getDeviceID()}" type="text" class="form-control" id="deviceID">
             </div>
             <div class="form-group">
                 <label for="statusTopic">Status Topic</label>
-                <input type="text" class="form-control" id="statusTopic">
+                <input th:value="${device.getStatusTopic()}" type="text" class="form-control" id="statusTopic">
             </div>
 
             <div class="form-group">
                 <label for="statusTopic">Status Pattern</label>
-                <input type="text" class="form-control" id="statusPattern">
+                <input th:value="${device.getStatusPattern()}" type="text" class="form-control" id="statusPattern">
             </div>
 
             <div class="form-group">
                 <label for="activePayload">Active Payload</label>
-                <input type="text" class="form-control" id="activePayload">
+                <input th:value="${device.getActivePayload()}" type="text" class="form-control" id="activePayload">
             </div>
             <div class="form-group">
                 <label for="inactivePayload">Inactive Payload</label>
-                <input type="text" class="form-control" id="inactivePayload">
+                <input th:value="${device.getInactivePayload()}" type="text" class="form-control" id="inactivePayload">
             </div>
 
             <label>Method</label>
             <div class="form-check">
-                <input class="form-check-input" name="method" type="radio" id="method-write" value="write" checked>
+                <input class="form-check-input" name="method" type="radio" id="method-write" value="write" th:checked="${device.getMethod().equals('write') ? 'checked' : 'false'}">
                 <label class="form-check-label" for="method-write">
                     Write
                 </label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" name="method" type="radio" id="method-read" value="read">
+                <input class="form-check-input" name="method" type="radio" id="method-read" value="read" th:checked="${device.getMethod().equals('read') ? 'checked' : 'false'}">
                 <label class="form-check-label" for="method-read">
                     Read
                 </label>
@@ -61,15 +61,17 @@
 
             <div class="form-group">
                 <label for="updateTopic">Update Topic</label>
-                <input type="text" class="form-control" id="updateTopic">
+                <input th:value="${device.getUpdateTopic()}" type="text" class="form-control" id="updateTopic">
             </div>
             <div class="form-group">
                 <label for="updatePattern">Update Pattern</label>
-                <input type="text" class="form-control" id="updatePattern">
+                <input th:value="${device.getUpdatePattern()}" type="text" class="form-control" id="updatePattern">
             </div>
 
-            <button id="addDevice" type="submit" class="btn btn-primary">Add Device</button>
+            <button id="save" type="submit" class="btn btn-primary">Save</button>
         </form>
+
+
     </div>
 
 </div>
@@ -84,7 +86,7 @@
         $("#updatePattern").attr("readonly", false);
     });
 
-    $("#addDevice").click(function (e) {
+    $("#save").click(function (e) {
         e.preventDefault();
 
         var error = $("#error");
@@ -112,8 +114,6 @@
             }
 
             data.updateTopic = updateTopic;
-            data.activePayload = activePayload;
-            data.inactivePayload = inactivePayload;
         } else {
             data.activePayload = "ON";
             data.inactivePayload = "OFF";
@@ -123,6 +123,8 @@
         data.deviceID = deviceID;
         data.statusTopic = statusTopic;
         data.method = writeMethod === true ? "write" : "read";
+        data.activePayload = activePayload;
+        data.inactivePayload = inactivePayload;
 
         if (statusPattern) {
             data.statusPattern = statusPattern;
@@ -132,8 +134,8 @@
         }
 
         $.ajax({
-            url: "/api/devices/",
-            type: "POST",
+            url: "/api/devices/[[${device.getDeviceID()}]]",
+            type: "PUT",
             data: data,
             success: function() {
                 window.location.href = "/devices";

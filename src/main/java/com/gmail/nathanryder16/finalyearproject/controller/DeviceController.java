@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
 public class DeviceController {
@@ -36,6 +37,21 @@ public class DeviceController {
 
         session.setAttribute("page", "devices");
         return "addDevice";
+    }
+
+    @RequestMapping("/editDevice/{deviceId}")
+    public String addDevice(@PathVariable(value="deviceId") String deviceId, HttpSession session, Model model) {
+        if (session.getAttribute("loggedIn") == null)
+            return "redirect:/login/";
+
+        Optional<Device> device = devices.getRepo().findById(deviceId);
+        if (device.isEmpty()) {
+            return "redirect:/dashboard/";
+        }
+
+        model.addAttribute("device", device.get());
+        session.setAttribute("page", "devices");
+        return "editDevice";
     }
 
     @DeleteMapping(value = "api/devices/{deviceId}", produces = "application/json")
