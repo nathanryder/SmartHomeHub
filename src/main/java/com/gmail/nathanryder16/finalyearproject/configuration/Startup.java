@@ -14,7 +14,6 @@ public class Startup implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        String email, String password, int validated
         if (users.findByEmail("admin@localhost.com") == null) {
             User user = new User("admin@localhost.com", "admin", 1);
             user.setSuperuser(1);

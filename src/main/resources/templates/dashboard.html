@@ -6,19 +6,19 @@
 <header th:insert="fragments/header.html :: header"></header>
 
 <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <p>Dashboard page</p>
-
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-            Add Card
+            <i class="fas fa-plus"></i> Add Card
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <button type="button" data-bs-toggle="modal" data-bs-target="#popup" th:each="card : ${availableCards}" class="dropdown-item" href="#" th:text="${card.toString()}"></button>
         </div>
     </div>
 
-    <div th:each="card : ${dashboard.getCards()}">
-        <div class="devicecard" th:insert="'fragments/'+${card.getType().getFilename()} :: test(${card}, ${card.getDevice()})"></div>
+    <div class="row">
+        <div th:each="card : ${dashboard.getCards()}" class="col-md-4">
+                <div class="devicecard" th:value="${card.getId()}" th:insert="'fragments/'+${card.getType().getFilename()} :: card(${card}, ${card.getDevice()})"></div>
+        </div>
     </div>
 
     <div class="modal fade" id="popup" tabindex="-1" aria-labelledby="popupLabel" aria-hidden="true">
@@ -47,6 +47,87 @@
     </div>
 
     <script>
+
+        $(".devicecard").contextmenu(function(ev){
+            console.log($(ev.currentTarget).attr("value"));
+            var cardId = $(this).attr("value");
+            var data = {
+                "cardID": cardId
+            };
+
+            $.ajax({
+                url: "/api/dashboards/",
+                type: "DELETE",
+                data: data,
+                success: function() {
+                    location.reload()
+                },
+                error: function(err) {
+                    if (err.responseJSON.error === undefined) {
+                        error.html("Server error occured");
+                        return;
+                    }
+
+                    displayError("#error", "Failed to delete card: " + err.responseJSON.error)
+                }
+            });
+
+            return false;
+        });
+
+        var deviceCard = $(".devicecard");
+        // deviceCard.hover(function (e) {
+        //     if (!e.ctrlKey)
+        //         return;
+        //
+        //     var el = $(this);
+        //     var html = "<i class='cardDelete fas fa-trash'></i>"
+        //     el.html(el.html() + html);
+        // });
+        // deviceCard.mouseleave(function (e) {
+        //     if (!e.ctrlKey)
+        //         return;
+        //
+        //     var el = $(this);
+        //     var html = "<i class=\"cardDelete fas fa-trash\" aria-hidden=\"true\"></i>"
+        //     el.html(el.html().replaceAll(html, ""))
+        // });
+        // function showDelete(el) {
+        //     el = $(el);
+        //     var html = "<i class='cardDelete fas fa-trash'></i>"
+        //     el.html(el.html() + html);
+        // }
+        // function removeDelete(el) {
+        //     el = $(el);
+        //     var html = "<i class=\"cardDelete fas fa-trash\" aria-hidden=\"true\"></i>"
+        //     el.html(el.html().replaceAll(html, ""))
+        // }
+
+        // $(".deleteCard").click(function () {
+        //     var deviceID = $(this).attr("value");
+        //
+        //     var data = {
+        //         "deviceID": deviceID
+        //     };
+        //
+        //     $.ajax({
+        //         url: "/api/dashboards/",
+        //         type: "DELETE",
+        //         data: data,
+        //         success: function() {
+        //             location.reload()
+        //         },
+        //         error: function(err) {
+        //             if (err.responseJSON.error === undefined) {
+        //                 error.html("Server error occured");
+        //                 return;
+        //             }
+        //
+        //             displayError("#error", "Failed to add card: " + err.responseJSON.error)
+        //         }
+        //     });
+        // });
+
         var popup = document.getElementById('popup');
         popup.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget;

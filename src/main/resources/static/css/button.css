@@ -1,0 +1,29 @@
+.button_on {
+    color: #fdfd96;
+}
+
+.button_off {
+    color: lightgray;
+}
+
+.status {
+    text-align: center;
+}
+
+.button {
+    padding: 20px;
+    margin-bottom: 10px;
+    background-color: #435361;
+    border-radius: 8px;
+    width: 100%;
+    box-shadow: 0.1em 0.1em #888;
+    text-align: center;
+    position: relative;
+}
+
+.button_name {
+    position: absolute;
+    top: 1;
+    font-size: 1.5em;
+    padding-left: 20px;
+}

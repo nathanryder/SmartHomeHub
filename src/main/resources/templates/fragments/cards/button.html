@@ -1,0 +1,11 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div class="button" th:fragment="card (card, device)" th:id="${card.getType().name()}+'_'+${device.getDeviceID()}" th:classappend="'button_'+${device.getLastStatus().toLowerCase()}">
+    <span class="status">
+        <span class="button_name" th:text="${device.getDisplayName()}"></span>
+        <i style="padding-top: 50px" class="fas fa-lightbulb fa-9x"></i>
+    </span>
+
+</div>
+
+</html>

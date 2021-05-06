@@ -38,3 +38,20 @@ body {
     border-radius: 5px;
     color: white;
 }
+
+.dropdown {
+    padding-bottom: 1em;
+}
+
+.cardDelete {
+    color: #ff6961;
+    position: absolute;
+    top: 0.7em;
+    right: 0.7em;
+    opacity: 0.8;
+    margin: 3px;
+}
+
+.cardDelete:hover {
+    opacity: 1;
+}

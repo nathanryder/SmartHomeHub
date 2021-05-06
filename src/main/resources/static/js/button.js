@@ -37,9 +37,9 @@ $(document).ready(function() {
             status = "off"
         }
 
-        $(this).removeClass("button_off");
-        $(this).removeClass("button_on");
-        $(this).addClass("button_" + status);
+        // $(this).removeClass("button_off");
+        // $(this).removeClass("button_on");
+        // $(this).addClass("button_" + status);
 
         stompClient.send("/ws/socket", {}, JSON.stringify({"deviceID": deviceID, "message": status.toUpperCase()}));
     })

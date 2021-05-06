@@ -5,18 +5,18 @@
     height: 80px;
     border-radius: 50%;
     display: inline-block;
-    border: 2px solid black;
+    border: 2px solid #242C34;
     text-align: center;
 }
 
 .smalltext {
-    font-size: 10px;
+    font-size: 12px;
     position: relative;
     top: 10px;
 }
 
 .badge_status {
     position: relative;
-    top: 20px;
-    color: darkviolet;
+    top: 23px;
+    color: #01b1a3;
 }

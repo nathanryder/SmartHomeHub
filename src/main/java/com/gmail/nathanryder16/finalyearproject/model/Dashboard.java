@@ -70,6 +70,7 @@ public class Dashboard {
             }
 
             Card card = new Card(cardType, device);
+            card.setId(key);
             cards.add(card);
         }
 
@@ -187,14 +188,16 @@ public class Dashboard {
             cards = (Map<String, Object>) root.get("cards");
         }
 
+        String id = getNextId(cards);
         Map<String, Object> cardMap = new HashMap<>();
         cardMap.put("type", card.getType().toString());
         cardMap.put("id", card.getDevice().getDeviceID());
-        cards.put(getNextId(cards), cardMap);
+        cards.put(id, cardMap);
 
         root.put("cards", cards);
 
         yaml.dump(root, new PrintWriter(dashboard));
+        card.setId(id);
     }
 
     public String getNextId(Map<String, Object> cards) {
