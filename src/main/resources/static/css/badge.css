@@ -1,22 +1,25 @@
 .badge {
-    background-color: white;
+    background-color: darkgray;
     color: black;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    display: inline-block;
-    border: 2px solid #242C34;
     text-align: center;
+    width: 100%;
+    height: 95%;
+    border-radius: 80px;
+    box-shadow: 0.1em 0.1em #888;
 }
 
 .smalltext {
-    font-size: 12px;
+    font-size: 2em;
     position: relative;
-    top: 10px;
+    top: 20px;
+    color: lightgray;
+    font-weight: normal;
 }
 
 .badge_status {
     position: relative;
-    top: 23px;
+    top: 70px;
     color: #01b1a3;
+    font-size: 3em;
+    font-weight: normal;
 }

@@ -25,5 +25,6 @@
     position: absolute;
     top: 1;
     font-size: 1.5em;
-    padding-left: 20px;
+    width: 100%;
+    left: 0;
 }

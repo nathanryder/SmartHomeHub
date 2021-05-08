@@ -55,3 +55,8 @@ body {
 .cardDelete:hover {
     opacity: 1;
 }
+
+.devicecard {
+    width: 100%;
+    height: 100%;
+}

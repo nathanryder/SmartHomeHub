@@ -3,9 +3,10 @@ $(document).ready(function() {
     var stompClient = Stomp.over(socket);
 
     stompClient.connect({}, function (frame) {
-        $(".devicecard").each(function (i, card) {
+        $("[id^=SLIDER]").each(function (i, card) {
 
-            var id = card.querySelector("div").id;
+            console.log(card)
+            var id = card.id;
             var deviceId = id.split("_")[1];
 
             var id = id.replace(".", "\\\.");
@@ -13,12 +14,11 @@ $(document).ready(function() {
                 var status = JSON.parse(msg.body).message;
                 var el = $("#" + id);
 
+                console.log("Status: " + status)
                 if (status === "ON") {
-                    el.removeClass("button_off");
-                    el.addClass("button_on");
-                } else if (status === "OFF") {
-                    el.removeClass("button_on");
-                    el.addClass("button_off");
+                    el.find("label>input").prop("checked", true);
+                } else {
+                    el.find("label>input").prop("checked", false);
                 }
             });
 
@@ -26,14 +26,20 @@ $(document).ready(function() {
     });
 
 
-    $("[id^=BUTTON]").click(function () {
+    $("[id^=SLIDER]").click(function () {
+        console.log("Ran")
         var deviceID = $(this).attr("id").split("_")[1];
+        $(this).prop("checked", true);
 
-        var selected = $(this).attr("class");
+        var selected = $(this).find("label>input").prop("checked")
+        console.log("Selected: " + selected);
 
         var status = "on";
-        if (selected.includes("button_on")) {
+        if (selected) {
+            $(this).prop("checked", true);
+        } else {
             status = "off"
+            $(this).prop("checked", false);
         }
 
         stompClient.send("/ws/socket", {}, JSON.stringify({"deviceID": deviceID, "message": status.toUpperCase()}));

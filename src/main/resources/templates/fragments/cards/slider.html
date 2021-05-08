@@ -1,0 +1,11 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<div class="slider" th:fragment="card (card, device)" th:id="${card.getType().name()}+'_'+${device.getDeviceID()}">
+    <label class="slide">
+        <input type="checkbox" th:checked="${device.getLastStatus().equals('ON') ? 'checked' : 'false'}">
+        <span th:attr="data-content=${device.getDisplayName()}" class="check"></span>
+    </label>
+</div>
+
+</html>

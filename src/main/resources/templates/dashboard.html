@@ -15,8 +15,8 @@
         </div>
     </div>
 
-    <div class="row">
-        <div th:each="card : ${dashboard.getCards()}" class="col-md-4">
+    <div class="row" style="min-height: 240px">
+        <div th:each="card : ${dashboard.getCards()}" class="col-md-4" style="min-height: 240px;">
                 <div class="devicecard" th:value="${card.getId()}" th:insert="'fragments/'+${card.getType().getFilename()} :: card(${card}, ${card.getDevice()})"></div>
         </div>
     </div>

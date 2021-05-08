@@ -5,7 +5,8 @@ import lombok.Getter;
 public enum CardType {
 
     BUTTON("cards/button.html", "/css/button.css", "/js/button.js"),
-    BADGE("cards/badge.html", "/css/badge.css", "/js/badge.js");
+    BADGE("cards/badge.html", "/css/badge.css", "/js/badge.js"),
+    SLIDER("cards/slider.html", "/css/slider.css", "/js/slider.js");
 
     private @Getter String filename;
     private @Getter String css;
